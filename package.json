@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "webpack": "webpack --mode development"
   },
   "keywords": [],
   "author": "",
@@ -13,5 +14,9 @@
     "express": "^4.16.4",
     "mongoose": "^5.4.2",
     "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "webpack": "^4.28.3",
+    "webpack-cli": "^3.2.1"
   }
 }
