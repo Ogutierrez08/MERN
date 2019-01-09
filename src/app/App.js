@@ -1,4 +1,5 @@
 import React,{Component} from 'react'
+import Pagination from './Pagination'
 
 class App extends Component {
     constructor(){
@@ -21,12 +22,17 @@ class App extends Component {
             np: '',
             to: '',
             see: '',
-            contests:[]
+            contests:[],
+            pageOfItems: []
         }
         this.handleChange = this.handleChange.bind(this)
         this.addContest = this.addContest.bind(this)
-        
+        this.onChangePage = this.onChangePage.bind(this);
     }
+    onChangePage(pageOfItem) {
+        this.setState({pageOfItems:pageOfItem})
+    }
+
     addContest(e){
         fetch('/api/contest', {
             method: 'POST',
@@ -75,7 +81,6 @@ class App extends Component {
         .then(res => res.json())
         .then(data =>{
             this.setState({contests:data})
-            console.log(contests)
         })
     }
 
@@ -95,7 +100,7 @@ class App extends Component {
                     </div>
                 </nav>
 
-                <div >
+                <div className="container">
                     <div className="row">
                         <div className="col s5">
                             <div className="card">
@@ -171,40 +176,29 @@ class App extends Component {
                                 <thead>
                                     <tr>
                                         <th>Distribuidora</th>
+                                        <th>CodigoVendedor</th>
                                         <th>Vendedor</th>
-                                        <th>PH</th>
-                                        <th>PT</th>
-                                        <th>PO</th>
-                                        <th>PÑ</th>
-                                        <th>TF</th>
-                                        <th>TH</th>
-                                        <th>INC</th>
-                                        <th>NP</th>
-                                        <th>TO</th>
+                                        <th>Periodo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {
-                                        this.state.contests.map(element =>{
+                                        this.state.pageOfItems.map(element =>{
                                             return(
                                                 <tr key={element._id}>
                                                     <td>{element.NombreDistribuidor}</td>
+                                                    <td>{element.CodigoVendedor}</td>
                                                     <td>{element.NombreVendedor}</td>
-                                                    <td>{element.PH}</td>
-                                                    <td>{element.PT}</td>
-                                                    <td>{element.PO}</td>
-                                                    <td>{element.PÑ}</td>
-                                                    <td>{element.TF}</td>
-                                                    <td>{element.TH}</td>
-                                                    <td>{element.INC}</td>
-                                                    <td>{element.NP}</td>
-                                                    <td>{element.TO}</td>
+                                                    <td>{element.InicioPeriodo}</td>
+                                                    <td><a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">create</i></a></td>
+                                                    <td><a class="btn-floating btn-large waves-effect waves-light green"><i class="material-icons">delete</i></a></td>
                                                 </tr>
                                             )
                                         })
                                     }
                                 </tbody>
                             </table>
+                            <Pagination items={this.state.contests} onChangePage={this.onChangePage} />
                         </div>
                     </div>
                 </div>
