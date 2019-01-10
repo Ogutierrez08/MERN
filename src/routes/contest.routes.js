@@ -98,7 +98,7 @@ router.put('/:id',async (req,res) => {
 })
 
 router.delete('/:id',async (req,res) =>{
-    await Contest.findOneAndRemove(req.params.id)
+    await Contest.findByIdAndRemove(req.params.id)
     res.json({status:'Contest Delete'})
 })
 

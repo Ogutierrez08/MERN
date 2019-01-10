@@ -33,6 +33,42 @@ class App extends Component {
         this.setState({pageOfItems:pageOfItem})
     }
 
+    deleteContest(id){
+        console.log('Eliminando',id)
+        fetch(`/api/contest/${id}`,{
+            method:'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type':'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+            M.toast({
+                html: 'Registro Eliminado',
+                classes: 'rounded',
+            })
+            this.fetchContest()
+        })
+    }
+
+    fetchContestByDist(dist){
+        console.log('Listando',dist)
+        fetch(`/api/contest/${dist}`,{
+            method:'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type':'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data =>{
+            this.setState({contests:data})
+            console.log(data)
+        })
+    }
+
     addContest(e){
         fetch('/api/contest', {
             method: 'POST',
@@ -92,14 +128,31 @@ class App extends Component {
     }
 
     render(){
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('select');
+        })
+
         return(
             <div>
                 <nav className="light-blue darken-4">
                     <div className="container">
-                        <a className="brand-logo" href="/">MERN CONTEST</a>
+                        <div className="row">
+                            <div className="col s5">
+                                <a className="brand-logo" href="/">MERN</a>
+                            </div>
+                            <div className="col s7" style={{marginTop:'10px'}}>
+                            <select id="LstDist" className="browser-default" onChange={()=>{
+                                this.fetchContestByDist(document.getElementById("LstDist").value)
+                            }}>
+                                <option value="" disabled selected>Selecciona una Distribuidora</option>
+                                <option value="DIPSA-ABANCAY">DIPSA-ABANCAY</option>
+                                <option value="DIPSA-ANDAHUAYLAS">DIPSA-ANDAHUAYLAS</option>
+                                <option value="CHUPACA BUSINESS">CHUPACA BUSINESS</option>
+                            </select>
+                            </div>
+                        </div>
                     </div>
                 </nav>
-
                 <div className="container">
                     <div className="row">
                         <div className="col s5">
@@ -190,8 +243,10 @@ class App extends Component {
                                                     <td>{element.CodigoVendedor}</td>
                                                     <td>{element.NombreVendedor}</td>
                                                     <td>{element.InicioPeriodo}</td>
-                                                    <td><a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">create</i></a></td>
-                                                    <td><a class="btn-floating btn-large waves-effect waves-light green"><i class="material-icons">delete</i></a></td>
+                                                    <td><a className="btn-floating btn-large waves-effect waves-light red"><i className="material-icons">create</i></a></td>
+                                                    <td><a className="btn-floating btn-large waves-effect waves-light green"  onClick={() =>{
+                                                        this.deleteContest(element._id)
+                                                    }}><i className="material-icons">delete</i></a></td>
                                                 </tr>
                                             )
                                         })
