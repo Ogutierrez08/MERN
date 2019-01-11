@@ -13,6 +13,11 @@ router.get('/:NombreDistribuidor',async (req,res) => {
     res.json(contestsByDist)
 })
 
+router.get('/id/:id',async (req,res) =>{
+    const contestsById = await Contest.findOne({_id:req.params.id})
+    res.json(contestsById)
+})
+
 router.post('/',async (req,res) => {
     const { 
     CodigoDistribuidor,

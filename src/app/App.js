@@ -53,6 +53,39 @@ class App extends Component {
         })
     }
 
+    fetchContestById(id){
+        console.log('Obteniendo Info',id)
+        fetch(`/api/contest/id/${id}`,{
+            method:'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type':'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data =>{
+            this.setState({
+                codigodistribuidor: data.CodigoDistribuidor,
+                nombredistribuidor: data.NombreDistribuidor,
+                codigovendedor: data.CodigoVendedor,
+                nombrevendedor: data.NombreVendedor,
+                inicioperiodo: '',
+                finperiodo : '',
+                ph: data.PH,
+                pt: data.PT,
+                se: data.SE,
+                po: data.PO,
+                pñ: data.PÑ,
+                tf: data.TF,
+                th: data.TH,
+                inc: data.INC,
+                np: data.NP,
+                to: data.TO,
+                see: data.SEE,
+            })   
+        })
+    }
+
     fetchContestByDist(dist){
         console.log('Listando',dist)
         fetch(`/api/contest/${dist}`,{
@@ -64,8 +97,7 @@ class App extends Component {
         })
         .then(res => res.json())
         .then(data =>{
-            this.setState({contests:data})
-            console.log(data)
+            this.setState({contests:data})   
         })
     }
 
@@ -145,7 +177,7 @@ class App extends Component {
                                 this.fetchContestByDist(document.getElementById("LstDist").value)
                             }}>
                                 <option value="" disabled selected>Selecciona una Distribuidora</option>
-                                <option value="DIPSA-ABANCAY">DIPSA-ABANCAY</option>
+                                <option value="KONSUMASS">KONSUMASS</option>
                                 <option value="DIPSA-ANDAHUAYLAS">DIPSA-ANDAHUAYLAS</option>
                                 <option value="CHUPACA BUSINESS">CHUPACA BUSINESS</option>
                             </select>
@@ -243,7 +275,9 @@ class App extends Component {
                                                     <td>{element.CodigoVendedor}</td>
                                                     <td>{element.NombreVendedor}</td>
                                                     <td>{element.InicioPeriodo}</td>
-                                                    <td><a className="btn-floating btn-large waves-effect waves-light red"><i className="material-icons">create</i></a></td>
+                                                    <td><a className="btn-floating btn-large waves-effect waves-light red" onClick={() => {
+                                                        this.fetchContestById(element._id)
+                                                    }}><i className="material-icons">create</i></a></td>
                                                     <td><a className="btn-floating btn-large waves-effect waves-light green"  onClick={() =>{
                                                         this.deleteContest(element._id)
                                                     }}><i className="material-icons">delete</i></a></td>
