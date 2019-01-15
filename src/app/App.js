@@ -5,29 +5,31 @@ class App extends Component {
     constructor(){
         super()
         this.state = {
-            codigodistribuidor: '',
-            nombredistribuidor: '',
-            codigovendedor: '',
-            nombrevendedor: '',
-            inicioperiodo: '',
-            finperiodo : '',
-            ph: '',
-            pt: '',
-            se: '',
-            po: '',
-            pñ: '',
-            tf: '',
-            th: '',
-            inc: '',
-            np: '',
-            to: '',
-            see: '',
+            _id:'',
+            CodigoDistribuidor: '',
+            NombreDistribuidor: '',
+            CodigoVendedor: '',
+            NombreVendedor: '',
+            InicioPeriodo: '',
+            FinPeriodo : '',
+            PH: '',
+            PT: '',
+            SE: '',
+            PO: '',
+            PÑ: '',
+            TF: '',
+            TH: '',
+            INC: '',
+            NP: '',
+            TO: '',
+            SEE: '',
             contests:[],
             pageOfItems: []
         }
         this.handleChange = this.handleChange.bind(this)
         this.addContest = this.addContest.bind(this)
-        this.onChangePage = this.onChangePage.bind(this);
+        this.onChangePage = this.onChangePage.bind(this)
+        this.updateContest = this.updateContest.bind(this)
     }
     onChangePage(pageOfItem) {
         this.setState({pageOfItems:pageOfItem})
@@ -65,23 +67,24 @@ class App extends Component {
         .then(res => res.json())
         .then(data =>{
             this.setState({
-                codigodistribuidor: data.CodigoDistribuidor,
-                nombredistribuidor: data.NombreDistribuidor,
-                codigovendedor: data.CodigoVendedor,
-                nombrevendedor: data.NombreVendedor,
-                inicioperiodo: '',
-                finperiodo : '',
-                ph: data.PH,
-                pt: data.PT,
-                se: data.SE,
-                po: data.PO,
-                pñ: data.PÑ,
-                tf: data.TF,
-                th: data.TH,
-                inc: data.INC,
-                np: data.NP,
-                to: data.TO,
-                see: data.SEE,
+                _id:data._id,
+                CodigoDistribuidor: data.CodigoDistribuidor,
+                NombreDistribuidor: data.NombreDistribuidor,
+                CodigoVendedor: data.CodigoVendedor,
+                NombreVendedor: data.NombreVendedor,
+                InicioPeriodo: data.InicioPeriodo,
+                FinPeriodo : data.FinPeriodo,
+                PH: data.PH,
+                PT: data.PT,
+                SE: data.SE,
+                PO: data.PO,
+                PÑ: data.PÑ,
+                TF: data.TF,
+                TH: data.TH,
+                INC: data.INC,
+                NP: data.NP,
+                TO: data.TO,
+                SEE: data.SEE
             })   
         })
     }
@@ -97,7 +100,27 @@ class App extends Component {
         })
         .then(res => res.json())
         .then(data =>{
-            this.setState({contests:data})   
+            this.setState({
+                _id:'',
+                CodigoDistribuidor: '',
+                NombreDistribuidor: '',
+                CodigoVendedor: '',
+                NombreVendedor: '',
+                InicioPeriodo: '',
+                FinPeriodo : '',
+                PH: '',
+                PT: '',
+                SE: '',
+                PO: '',
+                PÑ: '',
+                TF: '',
+                TH: '',
+                INC: '',
+                NP: '',
+                TO: '',
+                SEE: '',
+                contests:data
+            })   
         })
     }
 
@@ -116,27 +139,69 @@ class App extends Component {
                 html: 'Cuotas Guardadas'
             })
             this.setState({
-                codigodistribuidor: '',
-                nombredistribuidor: '',
-                codigovendedor: '',
-                nombrevendedor: '',
-                inicioperiodo: '',
-                finperiodo : '',
-                ph: '',
-                pt: '',
-                se: '',
-                po: '',
-                pñ: '',
-                tf: '',
-                th: '',
-                inc: '',
-                np: '',
-                to: '',
-                see: '',
+                _id:'',
+                CodigoDistribuidor: '',
+                NombreDistribuidor: '',
+                CodigoVendedor: '',
+                NombreVendedor: '',
+                InicioPeriodo: '',
+                FinPeriodo : '',
+                PH: '',
+                PT: '',
+                SE: '',
+                PO: '',
+                PÑ: '',
+                TF: '',
+                TH: '',
+                INC: '',
+                NP: '',
+                TO: '',
+                SEE: ''
             })
         })
         .catch(err => console.error(err))
 
+        e.preventDefault()
+    }
+
+    updateContest(e){
+        fetch(`/api/contest/${this.state._id}`, {
+            method: 'PUT',
+            body: JSON.stringify(this.state),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type':'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+            M.toast({
+                html: 'Cuotas Actualizadas'
+            })
+            this.setState({
+                _id:'',
+                CodigoDistribuidor: '',
+                NombreDistribuidor: '',
+                CodigoVendedor: '',
+                NombreVendedor: '',
+                InicioPeriodo: '',
+                FinPeriodo : '',
+                PH: '',
+                PT: '',
+                SE: '',
+                PO: '',
+                PÑ: '',
+                TF: '',
+                TH: '',
+                INC: '',
+                NP: '',
+                TO: '',
+                SEE: ''
+            })
+        })
+        .catch(err => console.error(err))
+        this.fetchContestByDist(document.getElementById("LstDist").value)
         e.preventDefault()
     }
 
@@ -190,67 +255,67 @@ class App extends Component {
                         <div className="col s5">
                             <div className="card">
                                 <div className="card-content">
-                                    <form onSubmit={this.addContest}>
+                                    <form onSubmit={this.updateContest}>
                                         <div className="row">
                                             <div className="input-field col s6">
-                                                <input name="codigodistribuidor" onChange={this.handleChange} type="text" placeholder="Codigo" value={this.state.codigodistribuidor}/>
+                                                <input name="CodigoDistribuidor" onChange={this.handleChange} type="text" placeholder="Codigo" value={this.state.CodigoDistribuidor}/>
                                             </div>
                                             <div className="input-field col s6">
-                                                <input name="nombredistribuidor" onChange={this.handleChange} type="text" placeholder="Distruibuidora" value={this.state.nombredistribuidor}/>
+                                                <input name="NombreDistribuidor" onChange={this.handleChange} type="text" placeholder="Distruibuidora" value={this.state.NombreDistribuidor}/>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="input-field col s12">
-                                                <input name="nombrevendedor" onChange={this.handleChange} type="text" placeholder="Vendedor" value={this.state.nombrevendedor}/>
+                                                <input name="NombreVendedor" onChange={this.handleChange} type="text" placeholder="Vendedor" value={this.state.NombreVendedor}/>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="input-field col s6">
-                                                <input name="ph" onChange={this.handleChange} type="text" placeholder="Cuota PH" value={this.state.ph}/>
+                                                <input name="PH" onChange={this.handleChange} type="text" placeholder="Cuota PH" value={this.state.PH}/>
                                             </div>
                                             <div className="input-field col s6">
-                                                <input name="pt" onChange={this.handleChange} type="text" placeholder="Cuota PT" value={this.state.pt}/>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="input-field col s6">
-                                                <input name="se" onChange={this.handleChange} type="text" placeholder="Cuota SE" value={this.state.se}/>
-                                            </div>
-                                            <div className="input-field col s6">
-                                                <input name="po" onChange={this.handleChange} type="text" placeholder="Cuota PO" value={this.state.po}/>
+                                                <input name="PT" onChange={this.handleChange} type="text" placeholder="Cuota PT" value={this.state.PT}/>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="input-field col s6">
-                                                <input name="pñ" onChange={this.handleChange} type="text" placeholder="Cuota PÑ" value={this.state.pñ}/>
+                                                <input name="SE" onChange={this.handleChange} type="text" placeholder="Cuota SE" value={this.state.SE}/>
                                             </div>
                                             <div className="input-field col s6">
-                                                <input name="tf" onChange={this.handleChange} type="text" placeholder="Cuota TF" value={this.state.tf}/>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="input-field col s6">
-                                                <input name="th" onChange={this.handleChange} type="text" placeholder="Cuota TH" value={this.state.th}/>
-                                            </div>
-                                            <div className="input-field col s6">
-                                                <input name="inc" onChange={this.handleChange} type="text" placeholder="Cuota INC" value={this.state.inc}/>
+                                                <input name="PO" onChange={this.handleChange} type="text" placeholder="Cuota PO" value={this.state.PO}/>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="input-field col s6">
-                                                <input name="np" onChange={this.handleChange} type="text" placeholder="Cuota NP" value={this.state.np}/>
+                                                <input name="PÑ" onChange={this.handleChange} type="text" placeholder="Cuota PÑ" value={this.state.PÑ}/>
                                             </div>
                                             <div className="input-field col s6">
-                                                <input name="to" onChange={this.handleChange} type="text" placeholder="Cuota TO" value={this.state.to}/>
+                                                <input name="TF" onChange={this.handleChange} type="text" placeholder="Cuota TF" value={this.state.TF}/>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="input-field col s6">
-                                                <input name="see" onChange={this.handleChange} type="text" placeholder="Cuota SEE" value={this.state.see}/>
+                                                <input name="TH" onChange={this.handleChange} type="text" placeholder="Cuota TH" value={this.state.TH}/>
+                                            </div>
+                                            <div className="input-field col s6">
+                                                <input name="INC" onChange={this.handleChange} type="text" placeholder="Cuota INC" value={this.state.INC}/>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="input-field col s6">
+                                                <input name="NP" onChange={this.handleChange} type="text" placeholder="Cuota NP" value={this.state.NP}/>
+                                            </div>
+                                            <div className="input-field col s6">
+                                                <input name="TO" onChange={this.handleChange} type="text" placeholder="Cuota TO" value={this.state.TO}/>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="input-field col s6">
+                                                <input name="SEE" onChange={this.handleChange} type="text" placeholder="Cuota SEE" value={this.state.SEE}/>
                                             </div>
                                         </div>
                                         <button type="submit" className="btn light-blue darken-4">
-                                            Agregar
+                                            Actualizar
                                         </button>
                                     </form>
                                 </div>
