@@ -2,7 +2,33 @@ const express = require('express')
 const router = express.Router();
 
 const Contest = require('../models/Contest')
+const Dist = require('../models/Dists')
 
+//DISTRIBUIDORAS
+
+router.get('/dist',async(req,res) => {
+    const dist = await Dist.find();
+    res.json(dist)
+})
+
+router.post('/dist',async(req,res) =>{
+    const {
+        CodigoDistribuidor,
+        NombreDistribuidor
+    } = req.body
+    const dist = new Dist({
+        CodigoDistribuidor,
+        NombreDistribuidor
+    })
+    await dist.save()
+    res.json({status:'Distribuidora Saved'})
+})
+
+router.delete('/dist/:id',async(req,res) => {
+    await Dist.findByIdAndRemove(req.params.id)
+    res.json({status:'Distribuidora Delete'})
+})
+//CUOTAS
 router.get('/',async (req,res) => {
     const contests = await Contest.find();
     res.json(contests)

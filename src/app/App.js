@@ -24,17 +24,29 @@ class App extends Component {
             TO: '',
             SEE: '',
             contests:[],
-            pageOfItems: []
+            pageOfItems: [],
+            distribuidoras:[]
         }
         this.handleChange = this.handleChange.bind(this)
         this.addContest = this.addContest.bind(this)
         this.onChangePage = this.onChangePage.bind(this)
         this.updateContest = this.updateContest.bind(this)
     }
+    
+    //PAGINACION
     onChangePage(pageOfItem) {
         this.setState({pageOfItems:pageOfItem})
     }
 
+    //DISTRIBUIDORAS
+    fetchDistribuidora(){
+        fetch('/api/contest/dist')
+        .then(res => res.json())
+        .then(data =>{
+            this.setState({distribuidoras:data})
+        })
+    }
+    //CUOTA
     deleteContest(id){
         console.log('Eliminando',id)
         fetch(`/api/contest/${id}`,{
@@ -207,6 +219,7 @@ class App extends Component {
 
     componentDidMount(){
         this.fetchContest()
+        this.fetchDistribuidora()
     }
 
     fetchContest(){
@@ -235,16 +248,20 @@ class App extends Component {
                     <div className="container">
                         <div className="row">
                             <div className="col s5">
-                                <a className="brand-logo" href="/">MERN</a>
+                                <a className="brand-logo" href="/">Cuotas Concurso</a>
                             </div>
                             <div className="col s7" style={{marginTop:'10px'}}>
                             <select id="LstDist" className="browser-default" onChange={()=>{
                                 this.fetchContestByDist(document.getElementById("LstDist").value)
                             }}>
                                 <option value="" disabled selected>Selecciona una Distribuidora</option>
-                                <option value="KONSUMASS">KONSUMASS</option>
-                                <option value="DIPSA-ANDAHUAYLAS">DIPSA-ANDAHUAYLAS</option>
-                                <option value="CHUPACA BUSINESS">CHUPACA BUSINESS</option>
+                                    {
+                                        this.state.distribuidoras.map(element => {
+                                            return(
+                                                <option value={element.NombreDistribuidor}>{element.NombreDistribuidor}</option>
+                                            )
+                                        })
+                                    }
                             </select>
                             </div>
                         </div>
