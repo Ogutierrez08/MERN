@@ -1,7 +1,9 @@
 import React from 'react'
 import {render} from 'react-dom'
-
 import App from './App'
+import AddDist from './AddDist'
 
 
-render(<App></App> , document.getElementById('app'))
+
+
+render(<AddDist></AddDist> , document.getElementById('app'))

@@ -3,6 +3,69 @@ const router = express.Router();
 
 const Contest = require('../models/Contest')
 const Dist = require('../models/Dists')
+const Imp = require('../models/Implementacion')
+
+//IMPLEMENTACION
+
+router.put('/imp/:id',async(req,res) =>{
+    const {
+        CodigoDistribuidor,
+        NombreDistribuidor,
+        Etapa,
+        Observacion,
+        Region,
+        Supervisor,
+        Contacto,
+        NumeroContacto
+    } = req.body
+    const newImp = {
+        CodigoDistribuidor,
+        NombreDistribuidor,
+        Etapa,
+        Observacion,
+        Region,
+        Supervisor,
+        Contacto,
+        NumeroContacto
+    }
+    await Imp.findByIdAndUpdate(req.params.id,newImp)
+    res.json({status:'Implementacion Update'})
+})
+router.get('/imp',async(req,res) =>{
+    const imp = await Imp.find()
+    res.json(imp)
+})
+
+router.post('/imp',async(req,res) =>{
+    const {
+        CodigoDistribuidor,
+        NombreDistribuidor,
+        Etapa,
+        Observacion,
+        Region,
+        Supervisor,
+        Contacto,
+        NumeroContacto
+    } = req.body
+
+    const imp = new Imp({
+        CodigoDistribuidor,
+        NombreDistribuidor,
+        Etapa,
+        Observacion,
+        Region,
+        Supervisor,
+        Contacto,
+        NumeroContacto
+    })
+    await imp.save()
+    res.json({status:'Implementacion Saved'})
+})
+
+router.delete('/imp/:id',async(req,res) => {
+    await Imp.findByIdAndRemove(req.params.id)
+    res.json({status:'Implementacion Delete'})
+})
 
 //DISTRIBUIDORAS
 
