@@ -7,6 +7,11 @@ const Imp = require('../models/Implementacion')
 
 //IMPLEMENTACION
 
+router.get('/imp/:id',async (req,res) =>{
+    const impById = await Imp.findOne({_id:req.params.id})
+    res.json(impById)
+})
+
 router.put('/imp/:id',async(req,res) =>{
     const {
         CodigoDistribuidor,

@@ -1,6 +1,5 @@
 import React,{Component} from 'react'
 import Pagination from './Pagination'
-import Modal from 'react-modal'
 
 
 
@@ -19,7 +18,6 @@ class AddDist extends Component{
             NumeroContacto: '',
             implementations:[],
             pageOfItems: [],
-            isActive:false
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -27,6 +25,7 @@ class AddDist extends Component{
         this.updateImp = this.updateImp.bind(this)
     }
     
+
     //PAGINACION
     onChangePage(pageOfItem) {
         this.setState({pageOfItems:pageOfItem})
@@ -47,7 +46,7 @@ class AddDist extends Component{
              body: JSON.stringify(this.state),
              headers: {
                  'Accept':'application/json',
-                 'Contest-type':'application/json'
+                 'Content-type':'application/json'
              }
          })
          .then(res => res.json())
@@ -61,6 +60,30 @@ class AddDist extends Component{
              })
          })
      }
+
+    fetchImpById(id){
+        fetch(`/api/contest/imp/${id}`,{
+            method : 'GET',
+            headers: {
+                'Accept' : 'application/json',
+                'Content-type':'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            this.setState({
+                _id:data._id,
+                CodigoDistribuidor:data.CodigoDistribuidor,
+                NombreDistribuidor:data.NombreDistribuidor,
+                Etapa:data.Etapa,
+                Observacion:data.Observacion,
+                Region:data.Region,
+                Supervisor:data.Supervisor,
+                Contacto:data.Contacto,
+                NumeroContacto:data.NumeroContacto
+            })
+        })
+    }
 
     findImp(){
         fetch('/api/contest/imp')
@@ -76,8 +99,8 @@ class AddDist extends Component{
     }
     render(){
         document.addEventListener('DOMContentLoaded', function() {
-            var elems = document.querySelectorAll('.modal');
-            var instances = M.Modal.init(elems);
+            var elems = document.querySelectorAll('.modal')
+            var instances = M.Modal.init(elems)
         })
 
         return(
@@ -116,12 +139,12 @@ class AddDist extends Component{
                                     </div>
                                     <div>
                                         <div className="row">
-                                            <div style={{margin:"5px"}}>
+                                            <div className="col" style={{margin:"5px"}}>
                                                 <a className="btn-floating btn-large waves-effect waves-light green">
                                                 <i className="material-icons">search</i>
                                                 </a>
                                             </div>
-                                            <div style={{margin:"5px"}}>
+                                            <div className="col" style={{margin:"5px"}}>
                                                 <a className="btn-floating btn-large waves-effect waves-light red">
                                                 <i className="material-icons">clear_all</i>
                                                 </a>
@@ -132,11 +155,79 @@ class AddDist extends Component{
                             </div>
                         </div>
                 </aside>
-                <div  style={{marginTop:'20px'}}>
+                <div id="modalImp" className="modal light-blue darken-4 white-text">
+                    <div className="modal-content">
+                        <div>
+                            <h4>Proceso de Implementacion</h4>
+                            <form onSubmit={this.updateImp}>
+                                <div className="row">
+                                    <div className="input-field col s6">
+                                        <input name="CodigoDistribuidor" type="text" onChange={this.handleChange} placeholder="CodigoDistribuidor" className="white-text" value={this.state.CodigoDistribuidor}></input>
+                                    </div>
+                                    <div className="input-field col s6">
+                                        <input name="NombreDistribuidor" type="text" onChange={this.handleChange} placeholder="NombreDistribuidor" className="white-text" value={this.state.NombreDistribuidor}></input>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="input-field col s6">
+                                        <select id="lstEtapa" onChange={this.handleChange} className="browser-default" value={this.state.Etapa}>
+                                            <option value="">Selecciona una Etapa</option>
+                                            <option value="01-Presentacion">01-Presentacion</option>
+                                            <option value="02-Homologacion de Datos">02-Homologacion de Datos</option>
+                                            <option value="03-Envio de Archivos Retroactivos">03-Envio de Archivos Retroactivos</option>
+                                            <option value="04-Segmentacion">04-Segmentacion</option>
+                                            <option value="05-Cancelado">05-Cancelado</option>
+                                            <option value="10-Produccion">10-Produccion</option>
+                                        </select>
+                                    </div>
+                                    <div className="input-field col s6">
+                                        <select id="lstRegion" onChange={this.handleChange} className="browser-default" value={this.state.Region}>
+                                            <option value="">Selecciona una Region</option>
+                                            <option value="NOR-ORIENTE">NOR-ORIENTE</option>
+                                            <option value="SUR-CENTRO">SUR-CENTRO</option>
+                                            <option value="LIMA">LIMA</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="input-field col s6">
+                                        <input name="Supervisor" type="text" onChange={this.handleChange} placeholder="Supervisor" className="white-text" value={this.state.Supervisor}></input>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="input-field col s6">
+                                        <textarea name="Observacion" onChange={this.handleChange} placeholder="Ingresar Observaciones" className="white-text" style={{width:"400px",height:"150px"}} value={this.state.Observacion}></textarea>
+                                    </div>
+                                    <div className="input-field col s6">
+                                        <input name="Contacto" type="text" onChange={this.handleChange} placeholder="Contacto" className="white-text" value={this.state.Contacto}></input>
+                                        <br></br>
+                                        <br></br>
+                                        <br></br>
+                                        <input name="NumeroContacto" type="text" onChange={this.handleChange} placeholder="Nro Contacto" className="white-text" value={this.state.NumeroContacto}></input>
+                                    </div>
+
+                                </div>
+                                <div className="row">
+                                    <div className="col">
+                                        <button type="submit" className="btn-floating btn-large waves-effect waves-light green">
+                                        <i className="material-icons">add_circle</i>
+                                        </button>
+                                    </div>
+                                    <div className="col">
+                                        <button type="submit" className="modal-close btn-floating btn-large waves-effect waves-light red">
+                                        <i className="material-icons">clear</i>
+                                        </button>
+                                    </div>  
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div style={{marginTop:'20px'}}>
                     <div className="row">
                         <div className="table-responsive col s9">
-                            <table className="table table-bordered white-text text-center" style={{fontSize:"10px",fontFamily:"Comic Sans MS"}}>
-                                <thead className="bg-success">
+                            <table className="centered white-text text-center highlight" style={{fontSize:"12px",fontFamily:"Comic Sans MS"}}>
+                                <thead className="green accent-4 white-text" style={{borderStyle:"solid"}}>
                                     <tr>
                                         <th></th>
                                         <th>Codigo</th>
@@ -153,9 +244,9 @@ class AddDist extends Component{
                                     {
                                         this.state.pageOfItems.map(element => {
                                             return(
-                                                <tr key={element._id}>
-                                                    <td><a className="btn-floating btn-small waves-effect waves-light green" href="#modal1" onClick={() => {
-                                                        //this.fetchContestById(element._id)
+                                                <tr key={element._id} style={{borderStyle:"solid"}}>
+                                                    <td ><a className="btn-floating btn-small waves-effect waves-light green btn modal-trigger" href="#modalImp" onClick={() => {
+                                                        this.fetchImpById(element._id)
                                                     }}><i className="material-icons">search</i></a></td>
                                                     <td>{element.CodigoDistribuidor}</td>
                                                     <td>{element.NombreDistribuidor}</td>
